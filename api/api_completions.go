@@ -222,7 +222,7 @@ func Completions(w http.ResponseWriter, r *http.Request) {
 			"noise_schedule":                 config.Parameters.NoiseSchedule,
 			"legacy_v3_extend":               config.Parameters.LegacyV3Extend,
 			"skip_cfg_above_sigma":           config.Parameters.SkipCFGAboveSigma,
-			"negative_prompt":                negativeWords + "pussy, nipples, nude, naked, nsfw, lowres, {bad}, error, fewer, extra, missing, worst quality, jpeg artifacts, bad quality, watermark, unfinished, displeasing, chromatic aberration, signature, extra digits, artistic error, username, scan, [abstract], low quality,worst quality,normal quality,text,signature,jpeg artifacts,bad anatomy,old,early,copyright name,watermark,artist name,signature,cat tail,cat,cherry blossoms tree",
+			"negative_prompt":                negativeWords + "pussy, nipples, nude, naked, nsfw, lowres, {bad}, error, fewer, extra, missing, worst quality, jpeg artifacts, bad quality, watermark, unfinished, displeasing, chromatic aberration, signature, extra digits, artistic error, username, scan, [abstract]",
 			"deliberate_euler_ancestral_bug": config.Parameters.DeliberateEulerAncestralBug,
 			"prefer_brownian":                config.Parameters.PreferBrownian,
 		},
@@ -348,9 +348,10 @@ func Completions(w http.ResponseWriter, r *http.Request) {
 
 			// 组装流式输出数据
 			sseResponse := fmt.Sprintf(
-				"data: {\"id\":\"%s\",\"object\":\"chat.completion.chunk\",\"created\":%d,\"model\":\"nai-diffusion-3\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\"%s\"},\"logprobs\":null,\"finish_reason\":null}]}\n\n",
+				"data: {\"id\":\"%s\",\"object\":\"chat.completion.chunk\",\"created\":%d,\"model\":\"%s\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\"%s\"},\"logprobs\":null,\"finish_reason\":null}]}\n\n",
 				"chatcmpl-"+fmt.Sprintf("%d", timestamp), // 生成一个唯一的 id
 				timestamp,
+				req.Model,
 				publicLink,
 			)
 

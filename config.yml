@@ -15,7 +15,7 @@ parameters:
   # 生成图像的高度（以像素为单位）。
   height: 1216
   # 像生成的比例，影响图像的细节和质量,最高为10。
-  scale: 10
+  scale: 5.5
   # 指定采样器类型。官方采样器: k_dpmpp_2s_ancestral(比较清晰) k_euler_ancestral(较好) k_euler(比较清晰) k_dpmpp_2m_sde(比较清晰)
   sampler: "k_euler_ancestral"
   # 生成图像的步骤数，步骤越多，生成的图像通常越精细，上限50，订阅会员超过 28 会扣点数。
@@ -26,26 +26,26 @@ parameters:
   ucPreset: 0
   # 是否启用高质量生成选项。
   qualityToggle: true
-  # 可能表示某种特定的模式或设置。
-  sm: true
+  # 可能表示某种特定的模式或设置(会打光影)。
+  sm: false
   # 动态设置，可能与生成过程的灵活性有关。
-  sm_dyn: true
+  sm_dyn: false
   # 动态阈值处理，可能用于调整图像生成的阈值。
-  dynamic_thresholding: false
+  dynamic_thresholding: true
   # 控制网络的强度，可能影响生成的图像细节。
   controlnet_strength: 1
   # 是否使用旧版模型或设置。
   legacy: false
   # 是否在生成图像中添加原始图像。
   add_original_image: true
-  # 配置重缩放参数。
+  # 配置重缩放参数。上限为 1
   cfg_rescale: 0
-  # 噪声调度策略，影响生成图像的噪声特性。 官方策略：polyexponential(会打上一层光影看着有朦胧之美) karras(较好) native(不好评价) exponential(较好)
+  # 噪声调度策略，影响生成图像的噪声特性。 官方策略：polyexponential(较好) karras(较好) native(不好评价) exponential(较好)
   noise_schedule: "karras"
   # 可能与旧版模型的扩展功能有关。
   legacy_v3_extend: false
-  # 可能与某种配置参数有关，具体取值为nil表示不使用该参数。
-  skip_cfg_above_sigma: null
+  # 可能与某种配置参数有关，具体取值为null表示不使用该参数。
+  skip_cfg_above_sigma: 19
   # 可能是与特定采样器有关的设置。
   deliberate_euler_ancestral_bug: false
   # 可能表示在生成过程中偏向于布朗运动的某种行为。
