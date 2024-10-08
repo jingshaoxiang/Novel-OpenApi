@@ -1,3 +1,7 @@
+# 启动端口号
+start:
+  port: "3388"
+
 # 图片存放本地的路径
 disk:
   dir: "/data/Alist"
