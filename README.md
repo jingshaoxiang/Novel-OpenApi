@@ -77,7 +77,7 @@ process_name=%(program_name)s_%(process_num)02d
 ![img.png](img/img_5.png)
 ![img.png](img/img.png)
 ![img.png](img/img_6.png)
-
+![img.png](img/img_7.png)
 
 🙌 感言
 ```txt

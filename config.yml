@@ -6,6 +6,10 @@ disk:
 alist:
   dir: "https://alist.master-jsx.top/NoveAI"
 
+# 画图教程
+drawingTutorial:
+  url: "https://www.master-jsx.top/archives/1718779955526"
+
 # 图片参数(我喜欢大雷,这是以大雷为准调试的参数，再苦不能苦孩子)
 parameters:
   # 参数版本，通常用于API版本控制。

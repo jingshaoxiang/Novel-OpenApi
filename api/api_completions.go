@@ -148,6 +148,9 @@ func Completions(w http.ResponseWriter, r *http.Request) {
 	// 图片映射地址
 	AlistDir := viper.GetString("alist.dir")
 
+	// 教程地址
+	drawingTutorial := viper.GetString("drawingTutorial.url")
+
 	// 如果是 OPTIONS 请求，直接返回 200 OK
 	if r.Method == http.MethodOptions {
 		w.WriteHeader(http.StatusOK)
@@ -343,7 +346,7 @@ func Completions(w http.ResponseWriter, r *http.Request) {
 			//alistURL := alist.AlistUrl(imagePath)
 
 			// 进行流式输出
-			publicLink := fmt.Sprintf("您需要的图片在这里→_→[模型产生的图片可能不过审](%s/%s)", AlistDir, imageName)
+			publicLink := fmt.Sprintf("您需要的图片在这里👉🏻 [点击预览](%s/%s) * [玩家画廊](%s) * [画图教程](%s)", AlistDir, imageName, AlistDir, drawingTutorial)
 			fmt.Println(publicLink)
 
 			// 组装流式输出数据
