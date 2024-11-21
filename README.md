@@ -4,7 +4,7 @@
 
 ## 🚀 项目简介
 
-**nai3-api** 使用[GO]语言编写的二进制[API]文件,对接[openai]接口格式来使用[POST]请求NovelAI，并将图片存入到我们的AList网盘中，达到免存储，在线览图的目的。
+**nai3-api** 使用[GO]语言编写的二进制[API]文件,对接[openai]接口格式来使用[POST]请求NovelAI，并将图片存入到我们的AList网盘中，实现免存储，在线览图。
 
 ## 📦 功能特性
 
@@ -44,8 +44,8 @@ https://lsky.master-jsx.top/i/2024/08/19/66c2d29546ef9.jpg
 
 # 使用supervisor启动
 [program:Nai3]
-command=/opt/app/nai3/nai3
-directory=/opt/app/nai3
+command=/opt/app/nai3/NoveAI3-x86   #二进制包
+directory=/opt/app/nai3   #二进制所在目录
 autorestart=true
 startsecs=3
 startretries=3

@@ -13,6 +13,7 @@ import (
 	"math/rand"
 	"net/http"
 	"os"
+	"os/exec"
 	"regexp"
 	"strings"
 	"time"
@@ -145,11 +146,8 @@ func Completions(w http.ResponseWriter, r *http.Request) {
 	// 图片存放地址
 	DiskDir := viper.GetString("disk.dir")
 
-	// 图片映射地址
-	AlistDir := viper.GetString("alist.dir")
-
-	// 教程地址
-	drawingTutorial := viper.GetString("drawingTutorial.url")
+	// 云主机类型
+	Type := viper.GetString("Cloud.type")
 
 	// 如果是 OPTIONS 请求，直接返回 200 OK
 	if r.Method == http.MethodOptions {
@@ -311,7 +309,7 @@ func Completions(w http.ResponseWriter, r *http.Request) {
 
 	// 获取当前时间戳
 	timestamp := time.Now().Unix()
-	imageName := fmt.Sprintf("%d_temp.png", timestamp)
+	imageName := fmt.Sprintf("%d.png", timestamp)
 	imagePath := outputDir + "/" + imageName
 	log.Printf("Image will be saved as: %s", imagePath)
 
@@ -342,11 +340,31 @@ func Completions(w http.ResponseWriter, r *http.Request) {
 			}
 			log.Println("图像文件写入成功。")
 
-			//获取解析链接
-			//alistURL := alist.AlistUrl(imagePath)
+			// 二进制
+			Alist := "./AlistUrl_" + Type
+
+			// 获取解析链接
+			URL := exec.Command(Alist, imageName)
+
+			// 使用 bytes.Buffer 捕获标准输出和错误输出
+			var out bytes.Buffer
+			var errOut bytes.Buffer
+			URL.Stdout = &out
+			URL.Stderr = &errOut
+
+			// 执行命令并获取结果
+			err = URL.Run()
+			if err != nil {
+				fmt.Println("执行命令时出错:", err)
+				fmt.Println("错误输出:", errOut.String())
+				return // 直接返回，避免继续执行
+			}
+
+			fmt.Println("解析链接:", out.String())
 
 			// 进行流式输出
-			publicLink := fmt.Sprintf("您需要的图片在这里👉🏻 [点击预览](%s/%s) * [玩家画廊](%s) * [画图教程](%s)", AlistDir, imageName, AlistDir, drawingTutorial)
+			//publicLink := fmt.Sprintf("您需要的图片在这里👉🏻 [点击预览](%s/%s) * [玩家画廊](%s) * [画图教程](%s)", AlistDir, imageName, AlistDir, drawingTutorial)
+			publicLink := fmt.Sprintf("![%s](%s)", imageName, out.String())
 			fmt.Println(publicLink)
 
 			// 组装流式输出数据

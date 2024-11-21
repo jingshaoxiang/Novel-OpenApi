@@ -2,17 +2,17 @@
 start:
   port: "3388"
 
-# 图片存放本地的路径
+# 图片存放本地的路径(注意事项)
 disk:
-  dir: "/data/Alist"
+  dir: "/data/AlistImages"
 
-# Alist地址(后面不用加 / )
+# 云主机类型(x86 / arm)
+Cloud:
+  type: "x86"
+
+# Alist地址(后面不用加 / )(匿名用户记得开)
 alist:
-  dir: "https://alist.master-jsx.top/NoveAI"
-
-# 画图教程
-drawingTutorial:
-  url: "https://www.master-jsx.top/archives/1718779955526"
+  dir: "https://alist.master-jsx.top"
 
 # 图片参数(我喜欢大雷,这是以大雷为准调试的参数，再苦不能苦孩子)
 parameters:

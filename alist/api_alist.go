@@ -5,13 +5,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"os"
 )
 
-// 定义响应结构体
-type ResponseAlist struct {
+type Response struct {
 	Code    int    `json:"code"`
 	Message string `json:"message"`
 	Data    struct {
@@ -19,65 +17,78 @@ type ResponseAlist struct {
 	} `json:"data"`
 }
 
-// 定义请求数据结构体
-type RequestData struct {
-	Path     string `json:"path"`
-	Password string `json:"password"`
-}
-
-// AlistUrl 函数返回 raw_url 和 error
 func main() {
-	// 检查命令行参数
 	if len(os.Args) < 2 {
-		log.Fatalf("Usage: %s <path>", os.Args[0])
+		fmt.Println("Usage: go run main.go <image_name>")
+		return
 	}
-	Images := os.Args[1] // 获取命令行参数
 
-	// 网站链接
+	imageName := os.Args[1]
 	url := "https://alist.master-jsx.top/api/fs/get"
-
-	// 创建请求数据
-	requestData := RequestData{
-		Path:     Images,
-		Password: "", // 这里可以根据需要设置密码
-	}
-	jsonData, err := json.Marshal(requestData)
-	if err != nil {
-		log.Fatalf("Error marshalling JSON: %v", err)
+	payload := map[string]string{
+		"path":     "/" + imageName,
+		"password": "",
 	}
 
-	// 创建一个新的 POST 请求
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+	// 将请求体编码为JSON
+	jsonPayload, err := json.Marshal(payload)
 	if err != nil {
-		log.Fatalf("Error creating request: %v", err)
+		fmt.Println("Error marshalling JSON:", err)
+		return
 	}
-	req.Header.Set("Content-Type", "application/json")
+
+	// 创建新的HTTP请求
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonPayload))
+	if err != nil {
+		fmt.Println("Error creating request:", err)
+		return
+	}
+
+	// 设置请求头
+	req.Header.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:132.0) Gecko/20100101 Firefox/132.0")
+	req.Header.Set("Accept", "application/json, text/plain, */*")
+	req.Header.Set("Accept-Language", "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2")
+	req.Header.Set("Accept-Encoding", "gzip, deflate, br, zstd")
+	req.Header.Set("Referer", "https://alist.master-jsx.top/?page=1")
+	req.Header.Set("Authorization", "")
+	req.Header.Set("Content-Type", "application/json;charset=utf-8")
+	req.Header.Set("Origin", "https://alist.master-jsx.top")
+	req.Header.Set("Sec-GPC", "1")
+	req.Header.Set("Connection", "keep-alive")
+	req.Header.Set("Cookie", "_ga_L7WEXVQCR9=GS1.1.1730338898.1.1.1730339413.0.0.0; _ga=GA1.1.1306726360.1730338898; _ga_89WN60ZK2E=GS1.1.1732156357.8.1.1732156855.0.0.0; p_uv_id=5cbce50c066af2b253988bd29c7b06ac")
+	req.Header.Set("Sec-Fetch-Dest", "empty")
+	req.Header.Set("Sec-Fetch-Mode", "cors")
+	req.Header.Set("Sec-Fetch-Site", "same-origin")
+	req.Header.Set("Priority", "u=0")
+	req.Header.Set("TE", " trailers")
 
 	// 发送请求
-	clientAlist := &http.Client{}
-	resp, err := clientAlist.Do(req)
+	client := &http.Client{}
+	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatalf("Error making request: %v", err)
+		fmt.Println("Error sending request:", err)
+		return
 	}
 	defer resp.Body.Close()
 
-	// 读取响应
+	// 读取响应体
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Fatalf("Error reading response body: %v", err)
+		fmt.Println("Error reading response body:", err)
+		return
 	}
 
-	// 打印响应结果
-	//fmt.Println("Response Status:", resp.Status)
-	//fmt.Println("Response Body:", string(body))
-
-	// 解析 JSON 响应
-	var responsealist ResponseAlist
-	err = json.Unmarshal(body, &responsealist)
-	if err != nil {
-		log.Fatalf("Error unmarshalling JSON: %v", err)
+	// 解析JSON响应
+	var response Response
+	if err := json.Unmarshal(body, &response); err != nil {
+		fmt.Println("Error unmarshalling JSON:", err)
+		return
 	}
 
-	// 提取 raw_url 并打印
-	fmt.Println(responsealist.Data.RawURL)
+	// 输出raw_url
+	if response.Code == 200 {
+		fmt.Print(response.Data.RawURL)
+	} else {
+		fmt.Print("Error:", response.Message)
+	}
 }
