@@ -10,7 +10,7 @@ disk:
 Cloud:
   type: "x86"
 
-# Alist地址(后面不用加 / )(匿名用户记得开)
+# Alist地址(后面不用加 / )(匿名用户记得开,默认访问路径就是本地挂载的云盘)
 alist:
   dir: "https://alist.master-jsx.top"
 
